@@ -23,8 +23,9 @@ def cli():
     parser.add_argument('--username', type=str,
                         help='an integer for the accumulator')
 
-    parser.add_argument('--zip', action='store_true',
-                        help='an integer for the accumulator')
+    parser.add_argument(
+        '--compress', action='store_true',
+        help='Compress target folder or file before transmission.')
 
     args = parser.parse_args()
     shuft.run(args)

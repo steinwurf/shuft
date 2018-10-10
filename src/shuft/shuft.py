@@ -17,18 +17,18 @@ async def upload_compressed(localpath, remote, remotepath, username):
     async with asyncssh.connect(host=remote, username=username) as conn:
         async with conn.start_sftp_client() as sftp:
 
-            archieve = shutil.make_archive('upload', 'zip', base_dir=localpath)
-            await sftp.put(archieve, remotepath=remotepath, preserve=True, recurse=True)
-            await conn.run('unzip -o -q ' + remotepath + archieve +
-                           ' -d ' + remotepath, check=True)
+            archieve = shutil.make_archive('upload', 'tar', base_dir=localpath)
+            await sftp.put(archieve, remotepath=remotepath, preserve=True)
+            await conn.run('tar -xf ' + os.path.join(remotepath,archieve) +
+                           ' -C ' + remotepath, check=True)
 
-            await sftp.remove(remotepath + archieve)
+            await sftp.remove(os.path.join(remotepath,archieve))
             os.remove(archieve)
 
 def run(args):
     upload_command = upload
 
-    if args.zip:
+    if args.compress:
         upload_command = upload_compressed
 
     try:
