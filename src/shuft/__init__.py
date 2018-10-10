@@ -2,5 +2,5 @@
 # encoding: utf-8
 from __future__ import absolute_import
 
-from shuft import upload
-from shuft import upload_compressed
+from shuft.shuft import upload
+from shuft.shuft import upload_compressed

@@ -6,15 +6,15 @@ import asyncio
 import asyncssh
 
 
-async def upload(localpath, remote, remotepath, username):
+async def upload(localpath, hostname, remotepath, username):
     """Upload files and folders."""
-    async with asyncssh.connect(host=remote, username=username) as conn:
+    async with asyncssh.connect(host=hostname, username=username) as conn:
         async with conn.start_sftp_client() as sftp:
             await sftp.put(localpath, remotepath=remotepath, preserve=True, recurse=True)
 
-async def upload_compressed(localpath, remote, remotepath, username):
+async def upload_compressed(localpath, hostname, remotepath, username):
     """Compress, upload, remote uncompress and remove archieves."""
-    async with asyncssh.connect(host=remote, username=username) as conn:
+    async with asyncssh.connect(host=hostname, username=username) as conn:
         async with conn.start_sftp_client() as sftp:
 
             archieve = shutil.make_archive('upload', 'tar', base_dir=localpath)
@@ -34,7 +34,7 @@ def run(args):
     try:
         asyncio.get_event_loop().run_until_complete(upload_command(
             args.localpath,
-            args.remote,
+            args.hostname,
             args.remotepath,
             args.username))
 
