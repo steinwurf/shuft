@@ -17,7 +17,7 @@ async def upload_compressed(localpath, hostname, remotepath, username):
     async with asyncssh.connect(host=hostname, username=username) as conn:
         async with conn.start_sftp_client() as sftp:
 
-            archieve = shutil.make_archive('upload', 'tar', base_dir=localpath)
+            archieve = shutil.make_archive('upload', 'gztar', base_dir=localpath)
             await sftp.put(archieve, remotepath=remotepath, preserve=True)
             await conn.run('tar -xf ' + os.path.join(remotepath,archieve) +
                            ' -C ' + remotepath, check=True)
