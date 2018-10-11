@@ -10,10 +10,10 @@ def cli():
     parser = argparse.ArgumentParser(description='''
         Upload directories or files, e.g.
         "shuft local_dir files.server.com /tmp/remote_dir/ --username USER"'
+
         ''')
     parser.add_argument('localpath', type=str,
                         help='Path to the local folder or file.')
-
     parser.add_argument('hostname', type=str,
                         help='The hostname for the remote.')
 
@@ -28,7 +28,16 @@ def cli():
         '--compress', action='store_true',
         help='Compress target folder or file before transmission.')
 
+    parser.add_argument(
+        '--version', action='store_true',
+        help='Print the version number.')
+
     args = parser.parse_args()
+
+    if args.version:
+        print("0.0.0")
+        return 
+
     shuft.run(args)
 
 

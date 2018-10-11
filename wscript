@@ -4,9 +4,6 @@
 import os
 import waflib
 
-VERSION = '0.0.0'
-
-
 def options(opt):
 
     opt.add_option(
@@ -22,7 +19,7 @@ def build(bld):
     # Create a virtualenv in the source folder and build universal wheel
     # Make sure the virtualenv Python module is in path
     with bld.create_virtualenv(cwd=bld.bldnode.abspath()) as venv:
-        venv.pip_install(packages=['wheel'])
+        venv.pip_install(packages=['wheel', 'setuptools_scm'])
 
     if not bld.options.run_tests:
         venv.run(cmd='python setup.py bdist_wheel --universal', cwd=bld.path)

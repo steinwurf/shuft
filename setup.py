@@ -1,71 +1,16 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
-import os
 import io
-import re
-import sys
 
 from setuptools import setup, find_packages
 
-cwd = os.path.abspath(os.path.dirname(__file__))
-
-with io.open(os.path.join(cwd, 'README.rst'), encoding='utf-8') as fd:
+with io.open('README.rst', encoding='utf-8') as fd:
     long_description = fd.read()
-
-
-def file_find_version(filepath):
-
-    with io.open(filepath, encoding='utf-8') as fd:
-
-        VERSION = None
-
-        regex = re.compile(
-            r"""
-        (                # Group and match
-            VERSION      #    Match 'VERSION'
-            \s*          #    Match zero or more spaces
-            =            #    Match and equal sign
-            \s*          #    Match zero or more spaces
-        )                # End group
-        '
-        (                # Group and match
-            \d\.\d\.\d  #    Match digit.digit.digit e.g. 1.2.3
-        )                # End of group
-        '
-        """, re.VERBOSE)
-
-        for line in fd:
-
-            match = regex.match(line)
-            if not match:
-                continue
-
-            # The second parenthesized subgroup.
-            VERSION = match.group(2)
-            break
-
-        else:
-            sys.exit('No VERSION variable defined in {} - aborting!'.format(
-                filepath))
-
-    return VERSION
-
-
-def find_version():
-
-    wscript_VERSION = file_find_version(
-        filepath=os.path.join(cwd, 'wscript'))
-
-    return wscript_VERSION
-
-
-VERSION = "0.0.0"
-
 
 setup(
     name='shuft',
-    version=VERSION,
+    use_scm_version=True,
     description=("Tool for uploading folders and files via sftp."),
     long_description=long_description,
     url='https://github.com/steinwurf/',
@@ -92,5 +37,5 @@ setup(
     packages=find_packages(where='src', exclude=['test']),
     package_dir={"": "src"},
     install_requires=['semantic_version', 'asyncssh'],
-    setup_requires=["pytest-runner", ],
+    setup_requires=["setuptools_scm", "pytest-runner", ],
 )
