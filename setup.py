@@ -62,6 +62,7 @@ def find_version():
 
 VERSION = "0.0.0"
 
+
 setup(
     name='shuft',
     version=VERSION,
@@ -91,4 +92,5 @@ setup(
     packages=find_packages(where='src', exclude=['test']),
     package_dir={"": "src"},
     install_requires=['semantic_version', 'asyncssh'],
+    setup_requires=["pytest-runner", ],
 )
