@@ -1,9 +1,9 @@
-import os
-import shutil
-import sys
-import asyncio
+#! /usr/bin/env python3
+# encoding: utf-8
 
 import asyncssh
+import os
+import shutil
 
 
 async def upload(localpath, hostname, remotepath, username):
@@ -24,19 +24,3 @@ async def upload_compressed(localpath, hostname, remotepath, username):
 
             await sftp.remove(os.path.join(remotepath,archieve))
             os.remove(archieve)
-
-def run(args):
-    upload_command = upload
-
-    if args.compress:
-        upload_command = upload_compressed
-
-    try:
-        asyncio.get_event_loop().run_until_complete(upload_command(
-            args.localpath,
-            args.hostname,
-            args.remotepath,
-            args.username))
-
-    except (OSError, asyncssh.Error) as exc:
-        sys.exit('SFTP operation failed: ' + str(exc))

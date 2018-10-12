@@ -36,6 +36,7 @@ setup(
     keywords=('sftp'),
     packages=find_packages(where='src', exclude=['test']),
     package_dir={"": "src"},
-    install_requires=['semantic_version', 'asyncssh'],
     setup_requires=["setuptools_scm", "pytest-runner", ],
+    install_requires=['asyncssh', ],
+    tests_require=['pytest', 'pytest-testdirectory'],
 )

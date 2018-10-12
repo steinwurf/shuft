@@ -2,6 +2,10 @@
 # encoding: utf-8
 
 import argparse
+import asyncio
+import asyncssh
+import sys
+
 import shuft
 
 
@@ -34,11 +38,20 @@ def cli():
 
     args = parser.parse_args()
 
-    if args.version:
-        print("0.0.0")
-        return 
+    upload_command = shuft.upload
 
-    shuft.run(args)
+    if args.compress:
+        upload_command = shuft.upload_compressed
+
+    try:
+        asyncio.get_event_loop().run_until_complete(upload_command(
+            args.localpath,
+            args.hostname,
+            args.remotepath,
+            args.username))
+
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('SFTP operation failed: ' + str(exc))
 
 
 if __name__ == "__main__":
