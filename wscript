@@ -26,5 +26,6 @@ def build(bld):
 
     # Run the unit-tests
     if bld.options.run_tests:
-        venv.pip_install(packages=['pytest', 'pytest-testdirectory'])
+        venv.pip_install(packages=[
+            'pytest', 'pytest-testdirectory'])
         venv.run(cmd='python setup.py pytest', cwd=bld.path)

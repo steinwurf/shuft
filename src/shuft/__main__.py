@@ -9,17 +9,18 @@ import sys
 import shuft
 
 
-def cli():
+def cli(args):
     """Command line."""
     parser = argparse.ArgumentParser(description='''
         Upload directories or files, e.g.
         "shuft local_dir files.server.com /tmp/remote_dir/ --username USER"'
-
         ''')
+
     parser.add_argument('localpath', type=str,
                         help='Path to the local folder or file.')
-    parser.add_argument('hostname', type=str,
-                        help='The hostname for the remote.')
+
+    parser.add_argument('host', type=str,
+                        help='The name of the host for the remote.')
 
     parser.add_argument('remotepath', type=str, help='''
         The base path on the remote where the content will be uploaded.
@@ -36,23 +37,14 @@ def cli():
         '--version', action='store_true',
         help='Print the version number.')
 
-    args = parser.parse_args()
-
-    upload_command = shuft.upload
-
-    if args.compress:
-        upload_command = shuft.upload_compressed
+    args = parser.parse_args(args)
 
     try:
-        asyncio.get_event_loop().run_until_complete(upload_command(
-            args.localpath,
-            args.hostname,
-            args.remotepath,
-            args.username))
+        asyncio.get_event_loop().run_until_complete(shuft.upload(args))
 
     except (OSError, asyncssh.Error) as exc:
         sys.exit('SFTP operation failed: ' + str(exc))
 
 
 if __name__ == "__main__":
-    cli()
+    cli(sys.argv[1:])

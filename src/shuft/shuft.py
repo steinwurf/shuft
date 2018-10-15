@@ -6,21 +6,23 @@ import os
 import shutil
 
 
-async def upload(localpath, hostname, remotepath, username):
-    """Upload files and folders."""
-    async with asyncssh.connect(host=hostname, username=username) as conn:
-        async with conn.start_sftp_client() as sftp:
-            await sftp.put(localpath, remotepath=remotepath, preserve=True, recurse=True)
-
-async def upload_compressed(localpath, hostname, remotepath, username):
+async def upload(args):
     """Compress, upload, remote uncompress and remove archieves."""
-    async with asyncssh.connect(host=hostname, username=username) as conn:
+    async with asyncssh.connect(args.host, username=args.username) as conn:
         async with conn.start_sftp_client() as sftp:
 
-            archieve = shutil.make_archive('upload', 'gztar', base_dir=localpath)
-            await sftp.put(archieve, remotepath=remotepath, preserve=True)
-            await conn.run('tar -xf ' + os.path.join(remotepath,archieve) +
-                           ' -C ' + remotepath, check=True)
+            if not args.compress:
+                await sftp.put(localpath, remotepath=args.remotepath,
+                                preserve=True, recurse=True)
+                return
 
-            await sftp.remove(os.path.join(remotepath,archieve))
+            archieve = shutil.make_archive(
+                'upload', 'gztar', base_dir=args.localpath)
+
+            await sftp.put(archieve, remotepath=args.emotepath, preserve=True)
+
+            await conn.run('tar -xf ' + os.path.join(args.remotepath,archieve) +
+                           ' -C ' + args.remotepath, check=True)
+
+            await sftp.remove(os.path.join(args.remotepath,archieve))
             os.remove(archieve)
