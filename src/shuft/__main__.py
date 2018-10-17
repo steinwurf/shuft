@@ -9,7 +9,7 @@ import sys
 import shuft
 
 
-def cli(args):
+async def cli(args):
     """Command line."""
     parser = argparse.ArgumentParser(description='''
         Upload directories or files, e.g.
@@ -26,8 +26,16 @@ def cli(args):
         The base path on the remote where the content will be uploaded.
         ''')
 
+    parser.add_argument('--port', type=int, help=''',
+        The port number on the remote.
+        ''')
+
     parser.add_argument('--username', type=str,
                         help='the username for logging in on the remote')
+
+    parser.add_argument(
+        '--password', type=str, default=None,
+        help='the password for logging in on the remote')
 
     parser.add_argument(
         '--compress', action='store_true',
@@ -38,13 +46,13 @@ def cli(args):
         help='Print the version number.')
 
     args = parser.parse_args(args)
-
-    try:
-        asyncio.get_event_loop().run_until_complete(shuft.upload(args))
-
-    except (OSError, asyncssh.Error) as exc:
-        sys.exit('SFTP operation failed: ' + str(exc))
+    await shuft.upload(args)
 
 
 if __name__ == "__main__":
-    cli(sys.argv[1:])
+
+    try:
+        asyncio.get_event_loop().run_until_complete(cli(sys.argv[1:]))
+
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('SFTP operation failed: ' + str(exc))
