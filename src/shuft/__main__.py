@@ -34,6 +34,9 @@ async def cli(args):
     parser.add_argument('--username', type=str, default=None,
         help='the username for logging in on the remote')
 
+    parser.add_argument('--client_keys', type=list, default=(),
+        help='List of client keys')
+
     parser.add_argument('--password', type=str, default=None,
         help='the password for logging in on the remote')
 

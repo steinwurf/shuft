@@ -11,14 +11,14 @@ async def upload(host, localpath, compress, **kwargs):
     """Compress, upload, remote uncompress and remove archieves."""
 
     connect_args = {k:v for k,v in kwargs.items() if k in
-        ['port', 'known_hosts', 'username', 'password', ]}
+        ['port', 'known_hosts', 'username', 'password', 'client_keys' ]}
 
     put_args = {k:v for k,v in kwargs.items() if k in ['remotepath', ]}
 
     async with asyncssh.connect(host, **connect_args) as conn:
         async with conn.start_sftp_client() as sftp:
             if compress is False:
-                await sftp.put(localpath2,
+                await sftp.put(localpath,
                                preserve=True,
                                recurse=True,
                                **put_args)
