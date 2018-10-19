@@ -38,5 +38,5 @@ setup(
     package_dir={"": "src"},
     setup_requires=["setuptools_scm", "pytest-runner", ],
     install_requires=['asyncssh', ],
-    tests_require=['pytest', 'pytest-testdirectory', 'pyftpdlib'],
+    tests_require=['pytest', 'pytest-testdirectory', ],
 )
