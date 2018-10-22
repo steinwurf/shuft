@@ -17,6 +17,10 @@ async def upload(host, localpath, compress, **kwargs):
 
     async with asyncssh.connect(host, **connect_args) as conn:
         async with conn.start_sftp_client() as sftp:
+
+            if not await sftp.exists(kwargs['remotepath']):
+                await sftp.mkdir(kwargs['remotepath'])
+
             if compress is False:
                 await sftp.put(localpath,
                                preserve=True,

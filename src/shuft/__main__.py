@@ -16,14 +16,17 @@ async def cli(args):
         "shuft local_dir files.server.com /tmp/remote_dir/ --username USER"'
         ''')
 
-    parser.add_argument('localpath', type=str,
-        help='Path to the local folder or file.')
-
-    parser.add_argument('host', type=str,
+    parser.add_argument('--host', type=str, required=True,
         help='The name of the host for the remote.')
 
-    parser.add_argument('remotepath', type=str,
-        help='The base path on the remote where the content will be uploaded.')
+    parser.add_argument('--command', choices=['put'], required=True,
+        help='The task to perform.')
+
+    parser.add_argument('--localpath', type=str, default="",
+        help='Path to the local folder or file.')
+
+    parser.add_argument('--remotepath', type=str, default="",
+        help='Path to the remote folder or file.')
 
     parser.add_argument('--port', type=int, default=22,
         help='The port number on the remote.')

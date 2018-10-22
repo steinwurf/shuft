@@ -6,6 +6,8 @@ import asyncssh
 import os
 import sys
 
+import subprocess
+
 import shuft
 
 from cryptography.hazmat.primitives import serialization as crypto_serialization
@@ -34,12 +36,17 @@ def generate_ssh_keys(testdirectory):
     testdirectory.write_binary('private_key', private_key)
     testdirectory.write_binary('public_key', public_key)
 
-async def start_server(cwd, port=2222):
+async def start_server(cwd, port):
 
     class DummyFTPServer(asyncssh.SFTPServer):
         def __init__(self, conn):
             root = cwd
             super().__init__(conn, chroot=root)
+
+
+    async def handle_client(process):
+        bc_proc = subprocess.Popen('bc', shell=True, stdin=subprocess.PIPE,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     await asyncssh.listen('', port=port,
                           server_host_keys=[os.path.join(cwd, 'private_key')],
@@ -62,10 +69,11 @@ def test_upload_file(testdirectory):
     loop = asyncio.get_event_loop()
 
     try:
-        loop.run_until_complete(start_server(testdirectory.path()))
+        loop.run_until_complete(start_server(testdirectory.path(), 2222))
 
         loop.run_until_complete(shuft.upload(
             host='localhost',
+            command='put',
             localpath=client_file_dir,
             remotepath='',
             port=2222,
@@ -77,3 +85,64 @@ def test_upload_file(testdirectory):
         sys.exit('Error starting server: ' + str(exc))
 
     assert testdirectory.contains_file('test_file')
+
+
+def test_upload_file_new_dir(testdirectory):
+
+    generate_ssh_keys(testdirectory)
+
+    client_dir = testdirectory.mkdir('client')
+    bar_dir = client_dir.mkdir('bar')
+    bar_dir.write_text('test_file', 'test contex', 'utf8')
+
+    loop = asyncio.get_event_loop()
+
+    try:
+        loop.run_until_complete(start_server(testdirectory.path(), 2223))
+
+        loop.run_until_complete(shuft.upload(
+            host='localhost',
+            command='put',
+            localpath=bar_dir.path(),
+            remotepath='foo/',
+            port=2223,
+            known_hosts=None,
+            compress=False,
+            client_keys=[os.path.join(testdirectory.path(), 'private_key')]))
+
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('Error starting server: ' + str(exc))
+
+    assert testdirectory.contains_dir('foo')
+    assert testdirectory.contains_file('foo/bar/test_file')
+
+def test_upload_directory(testdirectory):
+
+    generate_ssh_keys(testdirectory)
+
+    client_dir = testdirectory.mkdir('client')
+    foo_dir = client_dir.mkdir('foo')
+    bar_dir = foo_dir.mkdir('bar')
+    bar_dir.write_text('test_file', 'test contex', 'utf8')
+
+    loop = asyncio.get_event_loop()
+
+    try:
+        loop.run_until_complete(start_server(testdirectory.path(), 2224))
+
+        loop.run_until_complete(shuft.upload(
+            host='localhost',
+            command='put',
+            localpath=foo_dir.path(),
+            remotepath='',
+            port=2224,
+            known_hosts=None,
+            compress=False,
+            client_keys=[os.path.join(testdirectory.path(), 'private_key')]))
+
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('Error starting server: ' + str(exc))
+
+    assert testdirectory.contains_dir('foo')
+    assert testdirectory.contains_dir('foo/bar')
+    assert testdirectory.contains_file('foo/bar/test_file')
