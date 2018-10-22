@@ -12,14 +12,13 @@ import shuft
 async def cli(args):
     """Command line."""
     parser = argparse.ArgumentParser(description='''
-        Upload directories or files, e.g.
-        "shuft local_dir files.server.com /tmp/remote_dir/ --username USER"'
+        Upload directories or files
         ''')
 
     parser.add_argument('--host', type=str, required=True,
         help='The name of the host for the remote.')
 
-    parser.add_argument('--command', choices=['put'], required=True,
+    parser.add_argument('--command', choices=['upload'], required=True,
         help='The task to perform.')
 
     parser.add_argument('--localpath', type=str, default="",
@@ -51,7 +50,7 @@ async def cli(args):
     if args.known_hosts == 'None':
         args.known_hosts = None
 
-    await shuft.upload(**vars(args))
+    await shuft.run(**vars(args))
 
 
 if __name__ == "__main__":
