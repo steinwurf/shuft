@@ -5,7 +5,7 @@ build: off
 # https://www.appveyor.com/docs/windows-images-software/
 # https://www.appveyor.com/docs/build-environment/
 image:
-    - Visual Studio 2013
+    - Visual Studio 2015
 
 environment:
   matrix:
