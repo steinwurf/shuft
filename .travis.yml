@@ -4,6 +4,6 @@ python:
   - "3.6"
 cache: pip
 install:
-  - python waf configure
+  - python setup.py install
 script:
-  - python waf build --run_tests
+  - python setup.py pytest

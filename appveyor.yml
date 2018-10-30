@@ -9,7 +9,7 @@ environment:
     - PYTHON: "C:\\Python37-x64"
 
 install:
-  - "%PYTHON%\\python.exe waf configure"
+  - "%PYTHON%\\python.exe setup.py install"
 
 test_script:
-  - "%PYTHON%\\python.exe waf build --run_tests"
+  - "%PYTHON%\\python.exe setup.py pytest"
