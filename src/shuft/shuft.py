@@ -7,12 +7,6 @@ import shutil
 import sys
 
 
-async def run(command, **kwargs):
-
-    commands = {'upload': upload}
-
-    await commands[command](**kwargs)
-
 async def upload(host, localpath, remotepath, compress, **kwargs):
     """Compress, upload, remote uncompress and remove archieves."""
 

@@ -9,6 +9,8 @@ import sys
 import shuft
 
 
+commands = {'upload': shuft.upload}
+
 async def cli(args):
     """Command line."""
     parser = argparse.ArgumentParser(description='''
@@ -50,8 +52,12 @@ async def cli(args):
     if args.known_hosts == 'None':
         args.known_hosts = None
 
-    await shuft.run(**vars(args))
+    await run(**vars(args))
 
+
+async def run(command, **kwargs):
+
+    await commands[command](**kwargs)
 
 if __name__ == "__main__":
 
