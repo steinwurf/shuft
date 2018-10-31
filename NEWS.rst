@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+1.0.2
+-----
+* Patch: Packaginig fixes
+
 1.0.1
 -----
 * Patch: Packaginig fixes

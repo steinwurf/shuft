@@ -25,7 +25,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python',
-        'Topic :: Internet :: File Transfer Protocol (FTP)'
+        'Topic :: Internet :: File Transfer Protocol (FTP)',
         'Topic :: Utilities',
     ],
     entry_points={
