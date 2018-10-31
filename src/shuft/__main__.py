@@ -11,11 +11,13 @@ import shuft
 
 commands = {'upload': shuft.upload}
 
-async def cli(args):
+def cli():
     """Command line."""
     parser = argparse.ArgumentParser(description='''
         Upload directories or files
         ''')
+
+    args = sys.argv[1:]
 
     parser.add_argument('--command', choices=['upload'], required=True,
         help='the task to perform.')
@@ -53,7 +55,7 @@ async def cli(args):
     if args.known_hosts == 'None':
         args.known_hosts = None
 
-    await run(**vars(args))
+    return args
 
 
 async def run(command, **kwargs):
@@ -63,7 +65,7 @@ async def run(command, **kwargs):
 if __name__ == "__main__":
 
     try:
-        asyncio.get_event_loop().run_until_complete(cli(sys.argv[1:]))
+        asyncio.get_event_loop().run_until_complete(run(**vars(cli())))
 
     except (OSError, asyncssh.Error) as exc:
         sys.exit('SFTP operation failed: ' + str(exc))
