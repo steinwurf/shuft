@@ -6,4 +6,4 @@ from pkg_resources import get_distribution
 from shuft.shuft import upload
 from shuft.__main__ import cli
 
-__version__ = get_distribution('shuft').version
+__version__ = get_distribution(__name__).version

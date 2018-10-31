@@ -18,7 +18,7 @@ setup(
     author_email='contact@steinwurf.com',
     license='BSD 3-clause "New" or "Revised" License',
     classifiers=[
-        'Development Status :: 5 - Produciton/Stable',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
