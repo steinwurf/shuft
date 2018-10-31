@@ -18,15 +18,14 @@ setup(
     author_email='contact@steinwurf.com',
     license='BSD 3-clause "New" or "Revised" License',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Produciton/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python',
-        'Topic :: Documentation',
-        'Topic :: Software Development :: Documentation',
+        'Topic :: Internet :: File Transfer Protocol (FTP)'
         'Topic :: Utilities',
     ],
     entry_points={

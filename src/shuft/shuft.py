@@ -20,7 +20,9 @@ async def upload(host, localpath, remotepath, compress, **kwargs):
                 await sftp.mkdir(remotepath)
 
             if compress:
-                localpath = shutil.make_archive('upload', 'gztar', base_dir=localpath)
+                localpath = shutil.make_archive('upload',
+                                                'gztar',
+                                                base_dir=localpath)
 
             await sftp.put(localpath,
                            preserve=True,

@@ -17,35 +17,36 @@ async def cli(args):
         Upload directories or files
         ''')
 
-    parser.add_argument('--host', type=str, required=True,
-        help='The name of the host for the remote.')
-
     parser.add_argument('--command', choices=['upload'], required=True,
-        help='The task to perform.')
+        help='the task to perform.')
+
+    parser.add_argument('--host', type=str, required=True,
+        help='the remote host to connect to.')
 
     parser.add_argument('--localpath', type=str, default="",
-        help='Path to the local folder or file.')
+        help='path to the local folder or file.')
 
     parser.add_argument('--remotepath', type=str, default="",
-        help='Path to the remote folder or file.')
+        help='path to the remote folder or file.')
 
     parser.add_argument('--port', type=int, default=22,
-        help='The port number on the remote.')
+        help='port number on the remote (defaults to 22).')
 
     parser.add_argument('--known_hosts', type=str, default=(),
-        help='List of known hosts, if set to None accept any.')
+        help='list of known hosts, if set to None accepts any.')
 
     parser.add_argument('--username', type=str, default=None,
-        help='the username for logging in on the remote')
-
-    parser.add_argument('--client_keys', type=list, default=(),
-        help='List of client keys')
+        help='username for logging in on the remote, defaults to the current user')
 
     parser.add_argument('--password', type=str, default=None,
-        help='the password for logging in on the remote')
+        help='password for logging in on the remote')
 
-    parser.add_argument('--compress', action='store_true',
-        help='Compress target folder or file before transmission.')
+    parser.add_argument('--client_keys', type=list, default=(),
+        help='list of client private key(s)')
+
+    parser.add_argument('--compress', action='store_true', help='''
+        whether to compress target folder or file before transmission.
+        Requires that the host accepts ssh connections and has tar available''')
 
     args = parser.parse_args(args)
 
