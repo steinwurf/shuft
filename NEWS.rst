@@ -8,6 +8,11 @@ Latest
 ------
 * tbd
 
+1.0.4
+-----
+* Patch: Fixed commandline execution.
+* Patch: Added better error output upon failures.
+
 1.0.3
 -----
 * Patch: Fixed commandline execution.
