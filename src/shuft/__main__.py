@@ -58,14 +58,20 @@ def cli():
     return args
 
 
-async def run(command, **kwargs):
+def run():
+
+    args = cli()
+
+    try:
+        asyncio.get_event_loop().run_until_complete(run_command(**vars(args)))
+
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('SFTP operation failed: ' + str(exc))
+
+async def run_command(command, **kwargs):
 
     await commands[command](**kwargs)
 
 if __name__ == "__main__":
 
-    try:
-        asyncio.get_event_loop().run_until_complete(run(**vars(cli())))
-
-    except (OSError, asyncssh.Error) as exc:
-        sys.exit('SFTP operation failed: ' + str(exc))
+    run()
