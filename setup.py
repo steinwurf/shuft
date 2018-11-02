@@ -29,7 +29,7 @@ setup(
         'Topic :: Utilities',
     ],
     entry_points={
-        'console_scripts': ['shuft=shuft.__main__:cli'],
+        'console_scripts': ['shuft=shuft.__main__:run'],
     },
     keywords=('sftp'),
     packages=find_packages(where='src', exclude=['test']),

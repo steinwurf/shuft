@@ -13,26 +13,48 @@ async def upload(host, localpath, remotepath, compress, **kwargs):
     connect_args = {k:v for k,v in kwargs.items() if k in
         ['port', 'known_hosts', 'username', 'password', 'client_keys' ]}
 
-    async with asyncssh.connect(host, **connect_args) as conn:
-        async with conn.start_sftp_client() as sftp:
+    try:
+        async with asyncssh.connect(host, **connect_args) as conn:
 
-            if not await sftp.exists(remotepath):
-                await sftp.mkdir(remotepath)
+            try:
+                async with conn.start_sftp_client() as sftp:
 
-            if compress:
-                localpath = shutil.make_archive('upload',
-                                                'gztar',
-                                                base_dir=localpath)
+                    if not await sftp.exists(remotepath):
+                        try:
+                            await sftp.mkdir(remotepath)
+                        except (OSError, asyncssh.Error) as exc:
+                            sys.exit('Failed to create remote dir: ' + str(exc))
 
-            await sftp.put(localpath,
-                           preserve=True,
-                           recurse=True,
-                           remotepath=remotepath)
+                    if compress:
+                        localpath = shutil.make_archive('upload',
+                                                        'gztar',
+                                                        base_dir=localpath)
 
-            if compress:
-                await conn.run('tar -xf ' +
-                               os.path.join(remotepath, localpath) +
-                               ' -C ' + remotepath, check=True)
+                    try:
+                        await sftp.put(localpath,
+                                       preserve=True,
+                                       recurse=True,
+                                       remotepath=remotepath)
+                    except (OSError, asyncssh.Error) as exc:
+                        sys.exit('Failed to upload: ' + str(exc))
 
-                await sftp.remove(os.path.join(remotepath, localpath))
-                os.remove(localpath)
+                    if compress:
+                        try:
+                            await conn.run('tar -xf ' +
+                                           os.path.join(remotepath, localpath) +
+                                           ' -C ' + remotepath, check=True)
+                        except (OSError, asyncssh.Error) as exc:
+                            sys.exit('Executing remote command failed: ' + str(exc))
+
+                        try:
+                            await sftp.remove(os.path.join(remotepath, localpath))
+                        except (OSError, asyncssh.Error) as exc:
+                            sys.exit('Removing remote file failed: ' + str(exc))
+
+                        os.remove(localpath)
+
+            except (OSError, asyncssh.Error) as exc:
+                sys.exit('Failed to start sftp client: ' + str(exc))
+
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('Connection to host failed: ' + str(exc))
