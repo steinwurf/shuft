@@ -8,9 +8,13 @@ Latest
 ------
 * tbd
 
+1.1.1
+-----
+* Patch: Check Python version at setup.
+
 1.1.0
 -----
-* Patch: Added support and testing for Python 3.7
+* Minor: Added support and testing for Python 3.7
 
 1.0.4
 -----

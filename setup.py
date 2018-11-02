@@ -2,18 +2,22 @@
 # encoding: utf-8
 
 import io
+import sys
 
 from setuptools import setup, find_packages
 
 with io.open('README.rst', encoding='utf-8') as fd:
     long_description = fd.read()
 
+if sys.version_info < (3, 5):
+    raise RuntimeError("Requires Python 3.5+")
+
 setup(
     name='shuft',
     use_scm_version=True,
     description=("Tool for uploading folders and files via sftp."),
     long_description=long_description,
-    url='https://github.com/steinwurf/',
+    url='https://github.com/steinwurf/shuft',
     author='Steinwurf ApS',
     author_email='contact@steinwurf.com',
     license='BSD 3-clause "New" or "Revised" License',
