@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+1.1.0
+-----
+* Patch: Added support and testing for Python 3.7
+
 1.0.4
 -----
 * Patch: Fixed commandline execution.
