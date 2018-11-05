@@ -9,9 +9,6 @@ from setuptools import setup, find_packages
 with io.open('README.rst', encoding='utf-8') as fd:
     long_description = fd.read()
 
-if sys.version_info < (3, 5):
-    raise RuntimeError("Requires Python 3.5+")
-
 setup(
     name='shuft',
     use_scm_version=True,

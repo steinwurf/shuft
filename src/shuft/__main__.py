@@ -60,6 +60,9 @@ def cli():
 
 def run():
 
+    if sys.version_info < (3, 5):
+        raise RuntimeError("Requires Python 3.5+")
+
     args = cli()
 
     try:
