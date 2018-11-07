@@ -9,4 +9,4 @@ matrix:
           dist: xenial
 cache: pip
 script:
-  - waf build --run_tests
+  - ./waf build --run_tests
