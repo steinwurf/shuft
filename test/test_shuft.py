@@ -62,6 +62,7 @@ def test_upload_file(testdirectory):
 
     generate_ssh_keys(testdirectory)
 
+    #client/test_file
     client_dir = testdirectory.mkdir('client')
     client_dir.write_text('test_file', 'test contex', 'utf8')
     client_file_dir = os.path.join(client_dir.path(), 'test_file')
@@ -91,6 +92,7 @@ def test_upload_file_new_dir(testdirectory):
 
     generate_ssh_keys(testdirectory)
 
+    #client/bar/test_file
     client_dir = testdirectory.mkdir('client')
     bar_dir = client_dir.mkdir('bar')
     bar_dir.write_text('test_file', 'test contex', 'utf8')
@@ -120,6 +122,7 @@ def test_upload_directory(testdirectory):
 
     generate_ssh_keys(testdirectory)
 
+    #client/foo/bar/test_file
     client_dir = testdirectory.mkdir('client')
     foo_dir = client_dir.mkdir('foo')
     bar_dir = foo_dir.mkdir('bar')

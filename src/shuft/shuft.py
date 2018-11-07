@@ -28,8 +28,8 @@ async def upload(host, localpath, remotepath, compress, **kwargs):
                     if compress:
                         localpath = shutil.make_archive('upload',
                                                         'gztar',
-                                                        base_dir=localpath)
-
+                                                        root_dir=localpath,
+                                                        )
                     try:
                         await sftp.put(localpath,
                                        preserve=True,
@@ -39,15 +39,17 @@ async def upload(host, localpath, remotepath, compress, **kwargs):
                         sys.exit('Failed to upload: ' + str(exc))
 
                     if compress:
+                        archieve = os.path.basename(localpath)
+
                         try:
                             await conn.run('tar -xf ' +
-                                           os.path.join(remotepath, localpath) +
+                                           os.path.join(remotepath, archieve) +
                                            ' -C ' + remotepath, check=True)
                         except (OSError, asyncssh.Error) as exc:
                             sys.exit('Executing remote command failed: ' + str(exc))
 
                         try:
-                            await sftp.remove(os.path.join(remotepath, localpath))
+                            await sftp.remove(os.path.join(remotepath, archieve))
                         except (OSError, asyncssh.Error) as exc:
                             sys.exit('Removing remote file failed: ' + str(exc))
 
