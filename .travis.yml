@@ -8,5 +8,7 @@ matrix:
         - python: 3.7
           dist: xenial
 cache: pip
+install:
+  - ./waf configure
 script:
   - ./waf build --run_tests
