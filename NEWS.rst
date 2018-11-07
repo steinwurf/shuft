@@ -7,6 +7,8 @@ every change, see the Git log.
 Latest
 ------
 * tbd
+* Patch: Fixed created compressed archieve, which could result in wroong path
+         when '--compress' option was used.
 
 1.1.1
 -----
