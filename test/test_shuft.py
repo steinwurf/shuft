@@ -74,6 +74,8 @@ def test_upload_file(testdirectory):
 
         loop.run_until_complete(shuft.upload(
             host='localhost',
+            username = None,
+            password = None,
             command='put',
             localpath=client_file_dir,
             remotepath='',
@@ -104,6 +106,8 @@ def test_upload_file_new_dir(testdirectory):
 
         loop.run_until_complete(shuft.upload(
             host='localhost',
+            username = None,
+            password = None,
             command='put',
             localpath=bar_dir.path(),
             remotepath='foo/',
@@ -135,6 +139,8 @@ def test_upload_directory(testdirectory):
 
         loop.run_until_complete(shuft.upload(
             host='localhost',
+            username = None,
+            password = None,
             command='put',
             localpath=foo_dir.path(),
             remotepath='',

@@ -8,9 +8,6 @@ import sys
 
 import shuft
 
-
-commands = {'upload': shuft.upload}
-
 def cli():
     """Command line."""
     parser = argparse.ArgumentParser(description='''
@@ -71,7 +68,10 @@ def run():
     except (OSError, asyncssh.Error) as exc:
         sys.exit('SFTP operation failed: ' + str(exc))
 
+
 async def run_command(command, **kwargs):
+
+    commands = {'upload': shuft.upload}
 
     await commands[command](**kwargs)
 

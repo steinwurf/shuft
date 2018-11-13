@@ -4,11 +4,13 @@
 import os
 import waflib
 
+
 def options(opt):
 
     opt.add_option(
         '--run_tests', default=False, action='store_true',
         help='Run all unit tests')
+
 
 def configure(conf):
     pass
