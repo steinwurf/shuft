@@ -16,7 +16,7 @@ def cli():
 
     args = sys.argv[1:]
 
-    parser.add_argument('--command', choices=['upload'], required=True,
+    parser.add_argument('--command', choices=['upload', 'download'], required=True,
         help='the task to perform.')
 
     parser.add_argument('--host', type=str, required=True,
@@ -72,6 +72,7 @@ def run():
 async def run_command(command, **kwargs):
 
     commands = {'upload': shuft.upload}
+    commands = {'download': shuft.download}
 
     await commands[command](**kwargs)
 

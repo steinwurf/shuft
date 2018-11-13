@@ -9,7 +9,7 @@ import sys
 
 def connect_sftp(func):
 
-    async def wrap(host,port, known_hosts, username, password, client_keys,
+    async def wrap(host, port, known_hosts, username, password, client_keys,
                    **kwargs):
 
         try:
@@ -23,8 +23,10 @@ def connect_sftp(func):
 
                 try:
                     async with conn.start_sftp_client() as sftp:
-
-                        await func(sftp, **kwargs)
+                        try:
+                            await func(sftp, **kwargs)
+                        except (OSError, asyncssh.Error) as exc:
+                            sys.exit('Failed to run command: ' + str(exc))
 
                 except (OSError, asyncssh.Error) as exc:
                     sys.exit('Failed to start sftp client: ' + str(exc))
@@ -39,6 +41,7 @@ def connect_sftp(func):
 async def upload(sftp, localpath, remotepath, compress, **kwargs):
 
     if not await sftp.exists(remotepath):
+
         try:
             await sftp.mkdir(remotepath)
         except (OSError, asyncssh.Error) as exc:
@@ -73,3 +76,20 @@ async def upload(sftp, localpath, remotepath, compress, **kwargs):
             sys.exit('Removing remote file failed: ' + str(exc))
 
         os.remove(localpath)
+
+
+@connect_sftp
+async def download(sftp, localpath, remotepath, compress, **kwargs):
+
+    try:
+        await sftp.exists(remotepath)
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('Remotepath does not exists: ' + str(exc))
+
+    try:
+        await sftp.get(remotepath,
+                       preserve=True,
+                       recurse=True,
+                       localpath=localpath)
+    except (OSError, asyncssh.Error) as exc:
+        sys.exit('Failed to download: ' + str(exc))
