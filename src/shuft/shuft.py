@@ -19,12 +19,12 @@ def connect_sftp(func):
                                         username=username,
                                         password=password,
                                         client_keys=client_keys,
-                                        ) as conn:
+                                        ) as connection:
 
                 try:
-                    async with conn.start_sftp_client() as sftp:
+                    async with connection.start_sftp_client() as sftp:
                         try:
-                            await func(sftp, **kwargs)
+                            await func(connection, sftp, **kwargs)
                         except (OSError, asyncssh.Error) as exc:
                             sys.exit('Failed to run command: ' + str(exc))
 
@@ -38,7 +38,7 @@ def connect_sftp(func):
 
 
 @connect_sftp
-async def upload(sftp, localpath, remotepath, compress, **kwargs):
+async def upload(connection, sftp, localpath, remotepath, compress, **kwargs):
 
     if not await sftp.exists(remotepath):
 
@@ -64,32 +64,57 @@ async def upload(sftp, localpath, remotepath, compress, **kwargs):
         archieve = os.path.basename(localpath)
 
         try:
-            await conn.run('tar -xf ' +
-                           os.path.join(remotepath, archieve) +
-                           ' -C ' + remotepath, check=True)
+            await connection.run(
+                'tar -xf ' + os.path.join(remotepath, archieve) +
+                ' -C ' + remotepath, check=True)
         except (OSError, asyncssh.Error) as exc:
-            sys.exit('Executing remote command failed: ' + str(exc))
+            sys.exit('Failed to unpack archieve on host: ' + str(exc))
+
+        os.remove(localpath)
 
         try:
             await sftp.remove(os.path.join(remotepath, archieve))
         except (OSError, asyncssh.Error) as exc:
             sys.exit('Removing remote file failed: ' + str(exc))
 
-        os.remove(localpath)
-
 
 @connect_sftp
-async def download(sftp, localpath, remotepath, compress, **kwargs):
+async def download(connection, sftp, localpath, remotepath, compress, **kwargs):
 
     try:
         await sftp.exists(remotepath)
     except (OSError, asyncssh.Error) as exc:
         sys.exit('Remotepath does not exists: ' + str(exc))
 
+    os.makedirs(localpath, exist_ok=True)
+
+    if compress:
+        try:
+            await connection.run(
+                'tar -C ' + remotepath + ' -czf archive.tar .', check=True)
+        except (OSError, asyncssh.Error) as exc:
+            sys.exit('Failed to compress download target on host: ' + str(exc))
+
+        remotepath = 'archive.tar'
+        localpath = os.path.join(localpath, 'archive.tar')
+
     try:
         await sftp.get(remotepath,
                        preserve=True,
                        recurse=True,
-                       localpath=localpath)
+                       localpath=localpath,
+                       )
     except (OSError, asyncssh.Error) as exc:
         sys.exit('Failed to download: ' + str(exc))
+
+    if compress:
+        shutil.unpack_archive(localpath,
+                              extract_dir=os.path.dirname(localpath),
+                              )
+
+        os.remove(localpath)
+
+        try:
+            await sftp.remove(remotepath)
+        except (OSError, asyncssh.Error) as exc:
+            sys.exit('Removing remote file failed: ' + str(exc))

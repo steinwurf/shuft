@@ -71,8 +71,8 @@ def run():
 
 async def run_command(command, **kwargs):
 
-    commands = {'upload': shuft.upload}
-    commands = {'download': shuft.download}
+    commands = {'upload': shuft.upload,
+                'download': shuft.download}
 
     await commands[command](**kwargs)
 
