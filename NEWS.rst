@@ -7,6 +7,7 @@ every change, see the Git log.
 Latest
 ------
 * tbd
+* Minor: Added download functionality, specify command='download'.
 * Patch: Fixed created compressed archieve, which could result in wrong path when '--compress' option was used.
 
 1.1.1

@@ -76,7 +76,8 @@ def test_upload_file(testdirectory):
     try:
         loop.run_until_complete(start_server(server_dir.path(), testdirectory.path(), 2222))
 
-        loop.run_until_complete(shuft.upload(
+        loop.run_until_complete(shuft.__main__.run_command(
+            command = 'upload',
             host='localhost',
             username = None,
             password = None,
@@ -108,7 +109,8 @@ def test_upload_file_new_dir(testdirectory):
     try:
         loop.run_until_complete(start_server(server_dir.path(), testdirectory.path(), 2223))
 
-        loop.run_until_complete(shuft.upload(
+        loop.run_until_complete(shuft.__main__.run_command(
+            command = 'upload',
             host='localhost',
             username = None,
             password = None,
@@ -142,7 +144,8 @@ def test_upload_directory(testdirectory):
     try:
         loop.run_until_complete(start_server(server_dir.path(), testdirectory.path(), 2224))
 
-        loop.run_until_complete(shuft.upload(
+        loop.run_until_complete(shuft.__main__.run_command(
+            command = 'upload',
             host='localhost',
             username = None,
             password = None,
@@ -175,7 +178,8 @@ def test_download_file(testdirectory):
     try:
         loop.run_until_complete(start_server(server_dir.path(), testdirectory.path(), 2225))
 
-        loop.run_until_complete(shuft.download(
+        loop.run_until_complete(shuft.__main__.run_command(
+            command = 'download',
             host='localhost',
             username = None,
             password = None,
@@ -209,7 +213,8 @@ def test_download_directory(testdirectory):
     try:
         loop.run_until_complete(start_server(server_dir.path(), testdirectory.path(), 2226))
 
-        loop.run_until_complete(shuft.download(
+        loop.run_until_complete(shuft.__main__.run_command(
+            command = 'download',
             host='localhost',
             username = None,
             password = None,

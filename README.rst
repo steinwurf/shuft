@@ -35,17 +35,17 @@ Run with ''--help' for addtional options.
 
     shuft --help
 
-    usage: __main__.py [-h] --command {upload} --host HOST [--localpath LOCALPATH]
-                       [--remotepath REMOTEPATH] [--port PORT]
-                       [--known_hosts KNOWN_HOSTS] [--username USERNAME]
-                       [--password PASSWORD] [--client_keys CLIENT_KEYS]
-                       [--compress]
+    usage: shuft [-h] --command {upload,download} --host HOST
+                 [--localpath LOCALPATH] [--remotepath REMOTEPATH] [--port PORT]
+                 [--known_hosts KNOWN_HOSTS] [--username USERNAME]
+                 [--password PASSWORD] [--client_keys CLIENT_KEYS] [--compress]
 
     Upload directories or files
 
     optional arguments:
       -h, --help            show this help message and exit
-      --command {upload}    the task to perform.
+      --command {upload,download}
+                            the task to perform.
       --host HOST           the remote host to connect to.
       --localpath LOCALPATH
                             path to the local folder or file.
