@@ -8,7 +8,7 @@ Uses asyncssh and is pip installable for easy use in automated tasks.
     :target: https://travis-ci.org/steinwurf/shuft
 
 
-* Upload a file or folder to a sftp server.
+* Upload/download a file or a folder to/from a sftp server.
 * Requires Python 3.5 or newer.
 
 
