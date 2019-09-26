@@ -1,6 +1,7 @@
 Shuft
 =====
-
+.. image:: https://badge.fury.io/py/shuft.svg
+    :target: https://badge.fury.io/py/shuft
 .. image:: https://travis-ci.org/steinwurf/shuft.svg?branch=master
     :target: https://travis-ci.org/steinwurf/shuft
     
