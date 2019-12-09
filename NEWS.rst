@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+1.3.0
+-----
+* Minor: Added support and testing for Python 3.8
+
 1.2.0
 -----
 * Minor: Added download functionality, specify command='download'.
